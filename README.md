@@ -13,7 +13,7 @@ Here are the tools you'll need to install to get it running:
 ###Git
 You will need Git to install the configuration for the VM. If you don't already have Git installed, download Git from [git-scm.com](http://git-scm.com/downloads). Install the version for your operating system.
 
-**On Windows:** Git will provide you with a Unix-style terminal and shell called **Git Bash**.
+**On Windows:** Git will provide you with a Unix-style terminal and shell called **Git Bash**.  
 **On Mac or Linux:** You can use the regular terminal program.
 
 ###VirtualBox
@@ -31,7 +31,7 @@ Vagrant is the software that configures the VM and lets you share files between 
 **Other systems:** Use your favorite terminal program.
 
 From the terminal, run:
-```batch
+```
 cd /folder/to/install/project
 git clone http://github.com/gsbullmer/tournament-results tournament-results
 ```
