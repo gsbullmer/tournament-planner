@@ -7,3 +7,20 @@
 -- these lines here.
 
 
+CREATE TABLE players (
+    id SERIAL PRIMARY KEY,
+    name TEXT
+)
+
+CREATE TABLE matches (
+    id SERIAL PRIMARY KEY,
+    winner INT,
+    loser INT,
+    FOREIGN KEY (winner, loser) REFERENCES players (id, id)
+)
+
+-- Extra credit
+-- CREATE TABLE tournaments (
+--     id SERIAL PRIMARY KEY,
+--     name TEXT
+-- )
