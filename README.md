@@ -1,4 +1,4 @@
-#Tournament Results
+#Tournament Planner
 This is the second project in the [Udacity Fullstack Nanodgree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004) program.
 
 The purpose of this project is to create an app to handle a swiss-style tournament.
@@ -33,12 +33,12 @@ Vagrant is the software that configures the VM and lets you share files between 
 From the terminal, run:
 ```
 cd /folder/to/install/project
-git clone http://github.com/gsbullmer/tournament-results tournament-results
+git clone http://github.com/gsbullmer/tournament-planner tournament-planner
 ```
-This will give you a directory named **tournament-results**.
+This will give you a directory named **tournament-planner**.
 
 ###Run the virtual machine!
-Using the terminal, change directory to `tournament-results/vagrant`, then type `vagrant up` to launch your virtual machine.
+Using the terminal, change directory to `tournament-planner/vagrant`, then type `vagrant up` to launch your virtual machine.
 
 Once it is up and running, type `vagrant ssh` to log into it. This will log your terminal in to the virtual machine, and you'll get a Linux shell prompt. When you want to log out, type `exit` at the shell prompt. To turn the virtual machine off (without deleting anything), type `vagrant halt`. If you do this, you'll need to run `vagrant up` again before you can log into it.
 
