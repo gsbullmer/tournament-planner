@@ -3,6 +3,7 @@
 # tournament.py -- implementation of a Swiss-system tournament
 #
 
+import bleach
 import psycopg2
 
 
@@ -13,14 +14,30 @@ def connect():
 
 def deleteMatches():
     """Remove all the match records from the database."""
+    db = connect()
+    c = db.cursor()
+    c.execute("TRUNCATE matches RESTART IDENTITY CASCADE")
+    db.commit()
+    db.close()
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
+    db = connect()
+    c = db.cursor()
+    c.execute("TRUNCATE players RESTART IDENTITY CASCADE")
+    db.commit()
+    db.close()
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
+    db = connect()
+    c = db.cursor()
+    c.execute("SELECT COUNT(*) FROM players")
+    player_count = c.fetchall()
+    db.close()
+    return player_count
 
 
 def registerPlayer(name):
@@ -32,6 +49,12 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
+    db = connect()
+    c = db.cursor()
+    query = "INSERT INTO players (name) VALUES (%s)"
+    c.execute(query, (bleach.clean(name),))
+    db.commit()
+    db.close()
 
 
 def playerStandings():
@@ -47,6 +70,19 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
+    db = connect()
+    c = db.cursor()
+    query = '''
+        SELECT players.id, players.name, COUNT(matches.winner) AS wins, COUNT(matches.*) AS matches
+        FROM players, matches
+        WHERE players.id == matches.winner OR players.id == matches.loser
+        GROUP BY players.id
+        '''
+    c.execute(query)
+    standings = [{'id': str(row[0]), 'name': str(row[1]), 'wins': str(row[2]), 'matches': str(row[3])}
+                 for row in c.fetchall()]
+    db.close()
+    return standings
 
 
 def reportMatch(winner, loser):
@@ -56,8 +92,14 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
- 
- 
+    db = connect()
+    c = db.cursor()
+    query = "INSERT INTO matches (winner, loser) VALUES (%s, %s)"
+    c.execute(query, (winner, loser))
+    db.commit()
+    db.close()
+
+
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
   
@@ -73,5 +115,12 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
-
+    db = connect()
+    c = db.cursor()
+    query = "SELECT * FROM players"
+    c.execute(query)
+    pairings = [{'id1': str(row[0]), 'name1': str(row[1]), 'id2': str(row[2]), 'name2': str(row[3])}
+                for row in c.fetchall()]
+    db.close()
+    return pairings
 
