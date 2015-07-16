@@ -73,12 +73,15 @@ def playerStandings():
     db = connect()
     c = db.cursor()
     query = '''
-        SELECT players.id, players.name, COUNT(matches.winner) AS wins, COUNT(matches.*) AS matches
-        FROM players, matches
-        WHERE players.id == matches.winner OR players.id == matches.loser
-        GROUP BY players.id
+        SELECT p.player_id, p.name, m.wins
+        FROM players AS p, (
+          SELECT winner AS player_id, COUNT(winner) AS wins
+          FROM matches GROUP BY winner
+          ) AS m
+        WHERE p.player_id = m.player_id;
         '''
     c.execute(query)
+    print c.fetchall()
     standings = [{'id': str(row[0]), 'name': str(row[1]), 'wins': str(row[2]), 'matches': str(row[3])}
                  for row in c.fetchall()]
     db.close()
