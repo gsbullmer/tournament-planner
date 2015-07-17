@@ -120,7 +120,7 @@ def swissPairings():
     c = db.cursor()
     query = "SELECT * FROM players"
     c.execute(query)
-    pairings = [{'id1': str(row[0]), 'name1': str(row[1]), 'id2': str(row[2]), 'name2': str(row[3])}
+    pairings = [(str(row[0]), str(row[1]), str(row[2]), str(row[3]))}
                 for row in c.fetchall()]
     db.close()
     return pairings
