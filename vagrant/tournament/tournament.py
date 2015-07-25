@@ -72,17 +72,11 @@ def playerStandings():
     """
     db = connect()
     c = db.cursor()
-    query = '''
-        SELECT player_id, name, COUNT(CASE WHEN player_id = winner THEN 1 END) AS wins, COUNT(winner + loser) AS matches
-        FROM players LEFT JOIN matches
-        ON player_id = winner OR player_id = loser
-        GROUP BY player_id;
-        '''
+    query = "SELECT * FROM player_standings ORDER BY player_id"
     c.execute(query)
     standings = [(str(row[0]), str(row[1]), int(row[2]), int(row[3]))
                  for row in c.fetchall()]
     db.close()
-    print standings
     return standings
 
 
@@ -118,10 +112,17 @@ def swissPairings():
     """
     db = connect()
     c = db.cursor()
-    query = "SELECT * FROM players"
+    query = "SELECT * FROM player_standings ORDER BY wins DESC"
     c.execute(query)
-    pairings = [(str(row[0]), str(row[1]), str(row[2]), str(row[3]))}
-                for row in c.fetchall()]
+    players = [(str(row[0]), str(row[1]))
+               for row in c.fetchall()]
+    
+    """Pairs every two players against each other."""
+    pairings = []
+    i = 0
+    while i < countPlayers():
+        pairings.append([str(players[i][0]), str(players[i][1]),
+                         str(players[i+1][0]), str(players[i+1][1])])
+        i += 2
     db.close()
     return pairings
-

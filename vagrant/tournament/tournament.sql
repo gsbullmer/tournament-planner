@@ -6,6 +6,7 @@
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
 
+-- Tables
 
 CREATE TABLE players (
     player_id SERIAL PRIMARY KEY,
@@ -23,3 +24,14 @@ CREATE TABLE matches (
 --     id SERIAL PRIMARY KEY,
 --     name TEXT
 -- )
+
+
+-- Veiws
+
+CREATE VIEW player_standings AS
+    SELECT player_id, name,
+        COUNT(CASE WHEN player_id = winner THEN 1 END) AS wins,
+        COUNT(winner + loser) AS matches
+    FROM players LEFT JOIN matches
+    ON player_id = winner OR player_id = loser
+    GROUP BY player_id;
